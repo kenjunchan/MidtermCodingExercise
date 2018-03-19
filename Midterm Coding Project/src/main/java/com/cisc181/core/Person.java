@@ -89,21 +89,33 @@ public abstract class Person implements java.io.Serializable {
 	 */
 
 	public Person(String FirstName, String MiddleName, String LastName,
-			Date DOB, String Address, String Phone_number, String Email)
+			Date DOB, String Address, String Phone_number, String Email) throws PersonException
 	{
 		this.FirstName = FirstName;
 		this.MiddleName = MiddleName;
 		this.LastName = LastName;
 		this.setDOB(DOB);
+		Date today = new Date();
+		Date compareDate = new Date((today.getYear() + 1800),today.getMonth(),today.getDay());
+		if(DOB.before(compareDate))
+		{
+			throw new PersonException(this);
+		}
 		this.address = Address;
 		this.setPhone(Phone_number);
+		String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(this.phone_number);
+		if(!matcher.matches())
+		{
+			throw new PersonException(this);
+		}
 		this.email_address = Email;
 		
 	}
 
 	public void PrintName() {
-		System.out.println(this.FirstName + ' ' + this.MiddleName + ' '
-				+ this.LastName);
+		System.out.println(this.FirstName + ' ' + this.MiddleName + ' ' + this.LastName);
 	}
 
 	public void PrintDOB() {
