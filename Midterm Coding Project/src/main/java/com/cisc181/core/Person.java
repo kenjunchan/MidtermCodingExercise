@@ -96,7 +96,7 @@ public abstract class Person implements java.io.Serializable {
 		this.LastName = LastName;
 		this.setDOB(DOB);
 		Date today = new Date();
-		Date compareDate = new Date((today.getYear() + 1800),today.getMonth(),today.getDay());
+		Date compareDate = new Date(today.getYear() + 1800, today.getMonth(), today.getDay());
 		if(DOB.before(compareDate))
 		{
 			throw new PersonException(this);

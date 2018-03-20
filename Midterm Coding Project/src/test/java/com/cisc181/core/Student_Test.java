@@ -18,6 +18,14 @@ public class Student_Test {
 	private static ArrayList<Semester> semesterArray = new ArrayList();
 	private static ArrayList<Section> sectionArray = new ArrayList();
 	private static ArrayList<Student> studentArray = new ArrayList();
+	private static ArrayList<UUID> studentUUIDArray = new ArrayList();
+	
+	private static ArrayList<Enrollment> enrolls = new ArrayList<Enrollment>();
+	private static double[] studentsGrades = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	private static ArrayList<UUID> studentsUUIDs = new ArrayList<UUID>();
+	private static double[] sectionGrades = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	private static ArrayList<UUID> sectionUUIDs = new ArrayList<UUID>();
+	
 	
 	@BeforeClass
 	public static void setup() throws PersonException {
@@ -34,6 +42,7 @@ public class Student_Test {
 		
 		semesterArray.add(new Semester(FALL_UUID, new Date(2017, 8, 29), new Date(2017, 12, 16))); // Fall Semester
 		semesterArray.add(new Semester(SPRING_UUID, new Date(2018, 2, 5), new Date(2018, 5, 24))); // Spring Semester
+		System.out.println(CISC181_UUID.equals(courseArray.get(0).getCourseID()));
 		
 		int roomID = 1;
 		for(Semester Semester: semesterArray)
@@ -41,8 +50,8 @@ public class Student_Test {
 			for(Course Course: courseArray)
 			{
 				sectionArray.add(new Section(Course.getCourseID(),Semester.getSemesterID(),UUID.randomUUID(),roomID));
+				roomID += 2;
 			}
-			roomID += 2;
 		}
 		
 		studentArray.add(new Student("Ken", "Jun", "Chan", new Date(1999, 5, 8), eMajor.COMPSI, "123 Merryville Lane", "(728)-232-5281", "kjchan@udel.edu"));
@@ -56,11 +65,79 @@ public class Student_Test {
 		studentArray.add(new Student("Will", "Michael", "James", new Date(2000, 1, 16), eMajor.PHYSICS, "123 Merryville Lane", "(173)-942-2341", "wmJames@udel.edu"));
 		studentArray.add(new Student("Ryan", "", "White", new Date(1994, 2, 23), eMajor.COMPSI, "123 Merryville Lane", "(392)-634-2831", "rWhite@udel.edu"));
 		
+		for(Student s : studentArray)
+		{
+			studentUUIDArray.add(s.getStudentID());
+			for(Section se : sectionArray)
+			{
+				//Enrollment e = new Enrollment(se.getSectionID(), s.getStudentID());
+				enrolls.add(new Enrollment(se.getSectionID(), s.getStudentID()));
+			}
+		}
 		
+		for(Enrollment e : enrolls)
+		{
+			//System.out.println(e.getStudentID());
+			e.SetGrade(85.0);
+		}
+		// sets both grade arrays to grades per student and grades per section
 	}
+	
 
 	@Test
 	public void test() {
-		assertEquals(1, 1);
+		/*
+		double[] studentGradeAverage = new double[10];
+		double[] sectionGradeAverage = new double[6];
+		
+		for(int x = 0; x < studentGradeAverage.length; x++)
+		{
+			studentGradeAverage[x] = studentsGrades[x]/6.0;
+		}
+		
+		for(int x = 0; x < sectionGradeAverage.length; x++)
+		{
+			sectionGradeAverage[x] = sectionGrades[x]/10.0;
+		}	
+		
+		double[] correctSectionAverage = {85.0,85.0,85.0,85.0,85.0,85.0};
+		double[] correctStudentAverage = {85.0,85.0,85.0,85.0,85.0,85.0,85.0,85.0,85.0,85.0};
+		
+		for(int x = 0; x < studentGradeAverage.length; x++)
+		{
+			if(studentGradeAverage[x] != correctStudentAverage[x])
+				assertTrue(false);
+		}
+		assertTrue(true);
+		
+		for(int x = 0; x < sectionGradeAverage.length; x++)
+		{
+			if(sectionGradeAverage[x] != correctSectionAverage[x])
+				assertTrue(false);
+		}
+		assertTrue(true);
+		*/
+		for(Enrollment e: enrolls)
+		{
+			//System.out.println(e.getStudentID());
+		}
+		double enrolledClasses, totalGrade;
+		for (Student s: studentArray)
+		{
+			enrolledClasses = 0.0;
+			totalGrade = 0.0;
+			for(Enrollment e: enrolls)
+			{
+				//System.out.println(s.getStudentID().equals(e.getStudentID()));
+				if(s.getStudentID().equals(e.getStudentID()))
+				{
+					enrolledClasses += 1.0;
+					totalGrade += e.getGrade();
+					System.out.println(enrolledClasses);
+					System.out.println(totalGrade);
+				}
+				//assertEquals(85.0,(totalGrade / enrolledClasses), .01);
+			}
+		}
 	}
 }
