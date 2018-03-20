@@ -14,11 +14,12 @@ import com.cisc181.eNums.eMajor;
 
 public class Student_Test {
 
-	private static ArrayList<Course> courseArray = new ArrayList();
-	private static ArrayList<Semester> semesterArray = new ArrayList();
-	private static ArrayList<Section> sectionArray = new ArrayList();
-	private static ArrayList<Student> studentArray = new ArrayList();
-	private static ArrayList<UUID> studentUUIDArray = new ArrayList();
+	private static ArrayList<Course> courseArray = new ArrayList<Course>();
+	private static ArrayList<Semester> semesterArray = new ArrayList<Semester>();
+	private static ArrayList<Section> sectionArray = new ArrayList<Section>();
+	private static ArrayList<Student> studentArray = new ArrayList<Student>();
+	private static ArrayList<UUID> studentUUIDArray = new ArrayList<UUID>();
+	private static ArrayList<UUID> enrollmentUUIDArray = new ArrayList<UUID>();
 	
 	private static ArrayList<Enrollment> enrolls = new ArrayList<Enrollment>();
 	private static double[] studentsGrades = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -42,7 +43,7 @@ public class Student_Test {
 		
 		semesterArray.add(new Semester(FALL_UUID, new Date(2017, 8, 29), new Date(2017, 12, 16))); // Fall Semester
 		semesterArray.add(new Semester(SPRING_UUID, new Date(2018, 2, 5), new Date(2018, 5, 24))); // Spring Semester
-		System.out.println(CISC181_UUID.equals(courseArray.get(0).getCourseID()));
+		//System.out.println(CISC181_UUID.equals(courseArray.get(0).getCourseID()));
 		
 		int roomID = 1;
 		for(Semester Semester: semesterArray)
@@ -71,12 +72,13 @@ public class Student_Test {
 			for(Section se : sectionArray)
 			{
 				//Enrollment e = new Enrollment(se.getSectionID(), s.getStudentID());
-				enrolls.add(new Enrollment(se.getSectionID(), s.getStudentID()));
+				enrolls.add(new Enrollment(s.getStudentID(), se.getSectionID()));
 			}
 		}
 		
 		for(Enrollment e : enrolls)
 		{
+			
 			//System.out.println(e.getStudentID());
 			e.SetGrade(85.0);
 		}
@@ -86,37 +88,7 @@ public class Student_Test {
 
 	@Test
 	public void test() {
-		/*
-		double[] studentGradeAverage = new double[10];
-		double[] sectionGradeAverage = new double[6];
-		
-		for(int x = 0; x < studentGradeAverage.length; x++)
-		{
-			studentGradeAverage[x] = studentsGrades[x]/6.0;
-		}
-		
-		for(int x = 0; x < sectionGradeAverage.length; x++)
-		{
-			sectionGradeAverage[x] = sectionGrades[x]/10.0;
-		}	
-		
-		double[] correctSectionAverage = {85.0,85.0,85.0,85.0,85.0,85.0};
-		double[] correctStudentAverage = {85.0,85.0,85.0,85.0,85.0,85.0,85.0,85.0,85.0,85.0};
-		
-		for(int x = 0; x < studentGradeAverage.length; x++)
-		{
-			if(studentGradeAverage[x] != correctStudentAverage[x])
-				assertTrue(false);
-		}
-		assertTrue(true);
-		
-		for(int x = 0; x < sectionGradeAverage.length; x++)
-		{
-			if(sectionGradeAverage[x] != correctSectionAverage[x])
-				assertTrue(false);
-		}
-		assertTrue(true);
-		*/
+		//System.out.println(studentArray.get(0).getStudentID().equals(enrolls.get(0).getEnrollmentID()));
 		for(Enrollment e: enrolls)
 		{
 			//System.out.println(e.getStudentID());
@@ -128,7 +100,6 @@ public class Student_Test {
 			totalGrade = 0.0;
 			for(Enrollment e: enrolls)
 			{
-				//System.out.println(s.getStudentID().equals(e.getStudentID()));
 				if(s.getStudentID().equals(e.getStudentID()))
 				{
 					enrolledClasses += 1.0;
@@ -136,8 +107,9 @@ public class Student_Test {
 					System.out.println(enrolledClasses);
 					System.out.println(totalGrade);
 				}
-				//assertEquals(85.0,(totalGrade / enrolledClasses), .01);
 			}
+			assertEquals((totalGrade / enrolledClasses), 85.0, .01);
 		}
+		
 	}
 }
